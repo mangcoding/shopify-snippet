@@ -1,0 +1,15 @@
+<div class="filter-list">
+    <ul>
+        {% for tags in cate_arr %}
+        {% unless tags == blank %}
+        {% assign tag = tags|split:";" | first %}
+        {% assign tag_original = tags|split:";" | last %}
+        {% assign tag_label = tag_original | remove:prefix %}
+        <li>
+            <a {% if current_tags contains tag_original %} class="active" {%endif%}
+                data-href="{{ tag }}">{{ tag_label }}</a>
+        </li>
+        {% endunless %}
+        {% endfor %}
+    </ul>
+</div>

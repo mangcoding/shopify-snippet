@@ -1,0 +1,147 @@
+.filter-group {
+    border-top: 1px solid rgb(229, 229, 229);
+
+    h5 {
+        cursor: pointer;
+        position: relative;
+        outline: none;
+        padding: 12px 0px;
+        display: block;
+
+        &:after {
+            min-width: 30px;
+            content: "+";
+            font-weight: 700;
+            text-align: center;
+            float: right;
+            margin: -2px 10px 0 auto;
+            padding: 0 5px;
+            transition: all .2s ease-in-out;
+        }
+    }
+
+    .filter-list {
+        max-height: 0;
+        overflow: hidden;
+        transition: all .2s ease-in-out;
+    }
+
+    &.expanded {
+        h5 {
+            &:after {
+                content: "\2212";
+            }
+        }
+
+        .filter-list {
+            max-height: 100vw;
+            overflow-y: auto;
+        }
+    }
+
+    ul {
+        li {
+            a {
+                display: inline-block;
+                word-break: break-word;
+                white-space: normal;
+                color: inherit;
+                font-size: 16px;
+                line-height: 1.75;
+
+                &.active,
+                &:hover {
+                    color: rgb(141, 141, 141);
+                }
+            }
+        }
+
+        padding-bottom:20px;
+    }
+}
+
+#shopify-section-collection__sidebar {
+    position: relative;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .2s ease;
+    width: 0;
+
+    &.is_sidebar_show {
+        visibility: visible;
+        opacity: 1;
+        width: 25%;
+    }
+}
+
+#shopify-section-collection__main {
+    transition: all .2s ease;
+}
+
+#shopify-section-collection__sidebar {
+    &+.has-sidebar-option {
+        width: 75%;
+    }
+}
+
+#filter--sidebarToggle {
+    cursor: pointer;
+    outline: none;
+    border: transparent;
+    display: flex;
+    font-size: 1.5em;
+    line-height: 1.2;
+    vertical-align: middle;
+    padding: 0px 25px 0px 0px;
+    background: transparent;
+
+    &>span {
+        padding-right: 8px;
+        font-size: 16px;
+    }
+
+    &:hover,
+    &.is--toogled {
+        .icon-filters {
+            &:after {
+                box-shadow: currentcolor -8px 7px 0px 0px;
+                transform: translate3d(11px, 1px, 0px);
+            }
+        }
+    }
+
+    .icon-filters {
+        margin-top: 2px;
+        width: 16px;
+        height: 16px;
+        position: relative;
+
+        &:before {
+            content: "";
+            color: rgb(51, 51, 51);
+            width: 100%;
+            height: 2px;
+            box-shadow: currentcolor 0px 7px 0px 0px;
+            display: block;
+            position: absolute;
+            top: 3px;
+            left: 0px;
+            background: rgb(51, 51, 51);
+        }
+
+        &:after {
+            content: "";
+            color: rgb(51, 51, 51);
+            width: 2px;
+            height: 6px;
+            box-shadow: currentcolor 8px 7px 0px 0px;
+            display: block;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            transform: translate3d(3px, 1px, 0px);
+            background: rgb(51, 51, 51);
+            transition: transform 200ms ease 0s, box-shadow 200ms ease 0s;
+        }
+    }
+}

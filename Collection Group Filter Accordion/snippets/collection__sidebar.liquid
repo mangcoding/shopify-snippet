@@ -1,0 +1,81 @@
+<div id="shopify-section-collection__sidebar"
+    class="shopify-section sidebar-section collection-sidebar is_sidebar_show">
+    <aside class="one-whole column has-padding-bottom" id="collection-handle"
+        data-handle="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}">
+        {% assign sport_cate = blank %}
+        {% assign icon_cate = blank %}
+        {% assign type_cate = blank %}
+        {% assign color_cate = blank %}
+        {% assign price_cate = blank %}
+        {% assign size_cate = blank %}
+        {% for tag in collection.all_tags %}
+            {% if tag contains "sport:" %}
+                {% capture tags_append %}|{{ tag | handleize }};{{tag}}{%endcapture%}
+                {% assign sport_cate = sport_cate | append: tags_append %}
+            {% elsif tag contains "icon:" %}
+                {% capture tags_append %}|{{ tag | handleize }};{{tag}}{%endcapture%}
+                {% assign icon_cate = icon_cate | append: tags_append %}
+            {% elsif tag contains "product_type:" %}
+                {% capture tags_append %}|{{ tag | handleize }};{{tag}}{%endcapture%}
+                {% assign type_cate = type_cate | append: tags_append %}
+            {% elsif tag contains "color:" %}
+                {% capture tags_append %}|{{ tag | handleize }};{{tag}}{%endcapture%}
+                {% assign color_cate = color_cate | append: tags_append %}
+            {% elsif tag contains "price:" %}
+                {% capture tags_append %}|{{ tag | handleize }};{{tag}}{%endcapture%}
+                {% assign price_cate = price_cate | append: tags_append %}
+            {% elsif tag contains "size:" %}
+                {% capture tags_append %}|{{ tag | handleize }};{{tag}}{%endcapture%}
+                {% assign size_cate = size_cate | append: tags_append %}
+            {% endif %}
+        {% endfor %}
+        {% assign sport_cate_arr = sport_cate | split: "|" %}
+        {% assign icon_cate_arr = icon_cate | split: "|" %}
+        {% assign type_cate_arr = type_cate | split: "|" %}
+        {% assign color_cate_arr = color_cate | split: "|" %}
+        {% assign price_cate_arr = price_cate | split: "|" %}
+        {% assign size_cate_arr = size_cate | split: "|" %}
+
+        {% if sport_cate_arr.size > 0 %}
+        <div class="filter-group" id="filter-sport">
+            <h5>Sport: </h5>
+            {% include 'tag__filter__loop', cate_arr: sport_cate_arr, prefix: "sport: " %}
+        </div>
+        {% endif %}
+
+        {% if icon_cate_arr.size > 0 %}
+        <div class="filter-group" id="filter-icon">
+            <h5>Icon: </h5>
+            {% include 'tag__filter__loop', cate_arr: icon_cate_arr, prefix: "icon: " %}
+        </div>
+        {% endif %}
+
+        {% if type_cate_arr.size > 0 %}
+        <div class="filter-group" id="filter-type">
+            <h5>Product Type: </h5>
+            {% include 'tag__filter__loop', cate_arr: type_cate_arr, prefix: "product_type: " %}
+        </div>
+        {% endif %}
+
+        {% if color_cate_arr.size > 0 %}
+        <div class="filter-group" id="filter-color">
+            <h5>Color: </h5>
+            {% include 'tag__filter__loop', cate_arr: color_cate_arr, prefix: "color: " %}
+        </div>
+        {% endif %}
+
+        {% if price_cate_arr.size > 0 %}
+        <div class="filter-group" id="filter-price">
+            <h5>Price: </h5>
+            {% include 'tag__filter__loop', cate_arr: price_cate_arr, prefix: "price: " %}
+        </div>
+        {% endif %}
+
+        {% if size_cate_arr.size > 0 %}
+        <div class="filter-group" id="filter-size">
+            <h5>Size: </h5>
+            {% include 'tag__filter__loop', cate_arr: size_cate_arr, prefix: "size: " %}
+        </div>
+        {% endif %}
+    </aside>
+</div>

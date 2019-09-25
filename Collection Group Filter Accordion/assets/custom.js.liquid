@@ -1,0 +1,30 @@
+$(document).ready(function(){
+  $(document).on('click','#filter--sidebarToggle', function(e) {
+    e.preventDefault();
+    $(this).toggleClass("is--toogled");
+    $("#shopify-section-collection__main").toggleClass("has-sidebar-option");
+    $("#shopify-section-collection__sidebar").toggleClass("is_sidebar_show");
+  });
+
+  $(".filter-group").on("click","h5", function(e) {
+    e.preventDefault();
+    $(this).parent().toggleClass("expanded");
+  });
+  
+  $(".filter-group").on("click","a", function(e) {
+    e.preventDefault();
+    $(this).toggleClass("active");
+    let collection = $("#collection-handle").data().handle;
+    let filters = [];
+    $(".filter-group a.active").each(function( i, val ) {
+      filters.push($(this).data().href);
+    });
+    if (filters.length > 0) {
+      //let newFilterURL = collection+"/"+filters.join("+");
+      //window.location.href = newFilterURL;
+      Shopify.theme.jsCollection.newFilterURL(filters.join("+"));
+    } else {
+      Shopify.theme.jsCollection.newFilterURL("");
+    }
+  });
+});
