@@ -202,3 +202,86 @@
         }
     }
 }
+
+@media only screen and (max-width: 798px) {
+    body.body-lock {
+        position: fixed;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .side-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1110;
+        transition: 0.3s all ease-in;
+        opacity: 0;
+
+        &.is-show {
+            display: block;
+            opacity: 1;
+        }
+    }
+
+    #shopify-section-collection__sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        background: white;
+        z-index: 1111;
+        width: 260px !important;
+        border-right: 1px solid #eaeaea;
+        overflow-y: auto;
+        left: 0;
+        transition: all 0.3s ease-in;
+        opacity: 1;
+        visibility: visible;
+
+        &.is_sidebar_show {
+            left: -100%;
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+
+    .filter-group {
+        ul {
+            li {
+                position: relative;
+
+                a {
+                    svg {
+                        position: absolute;
+                        top: 50%;
+                        right: 10px;
+                        transform: translateY(-50%);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .section.section__wrapper {
+        padding: 10px 0;
+    }
+
+    .collection__filters {
+        margin-top: 20px;
+
+        .is-flex-wrap {
+            justify-content: space-between !important;
+            flex-direction: row-reverse;
+
+            .collection__sort-by-filter {
+                width: 70%;
+            }
+        }
+    }
+}
