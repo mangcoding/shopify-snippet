@@ -1,0 +1,226 @@
+{{ 'flickity.min.css' | asset_url | stylesheet_tag }}
+<style>
+  #instagramFeed {
+    height: calc(100vw / 3 - 180px);
+    min-height:300px;
+  }
+  #instagramFeedDesc {
+    margin-top:30px;
+    margin-bottom:20px;
+  }
+  #instagramFeedDesc .title a {color:#ee52b2;}
+  .Button {
+    padding: 14px 28px;
+    line-height: normal;
+    border: 1px solid transparent;
+    border-radius: 0;
+    text-transform: uppercase;
+    font-size: 16px;
+    text-align: center;
+    color:#FFF;
+    background-color:#000;
+    display:inline-block;
+    margin-bottom:0.75em;
+    transition:all .3s ease;
+  }
+  .Button:hover{
+    background-color:rgba(0,0,0,.9);
+    color:#ee52b2;
+  }
+  .d-md-flex {
+    text-align:center;
+  }
+  @media screen and (min-width:768px) {
+    .d-md-flex {
+      text-align:unset;
+      display:flex;
+      margin-left: 10px;
+      margin-right: 10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+  }
+  .carousel-cell {
+    width: calc(100vw / 3 - 180px);
+    min-width:300px;
+    height: 100%;
+    margin-right: 10px;
+    background: #000;
+    border-radius: 5px;
+    counter-increment: carousel-cell;
+  }
+  .Instafeed--item {
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .Instafeed--item .Instafeed--thumbnail{
+    object-fit:cover;
+    object-position: center center;
+    width:100%;
+    height:100%;
+  }
+  .Instafeed--item:hover .Instafeed--Caption--overlay  {
+    visibility: visible;
+    top:0;
+    z-index:99;
+  }
+  .Instafeed--item .Instafeed--Caption--overlay {
+    width:100%;
+    height:100%;
+    padding:20px;
+    position:absolute;
+    visibility: hidden;
+    top:100%;
+    z-index:-1;
+    transition: all 0.2s ease-in-out;
+    padding:20px;
+    box-sizing: border-box;
+    background:rgba(0,0,0,.7);
+  }
+  .Instafeed--item .Instafeed--Caption--overlay .Instafeed--LikeCount svg {
+    fill :#FFF;
+    margin-right: 8px;
+    width: 17px;
+    height: 15px;
+    vertical-align: sub;
+  }
+  .Instafeed--item .Instafeed--Caption--overlay .Instafeed--Caption {
+    position: relative;
+    height: calc(100% - 70px);
+    margin: 20px 0;
+    overflow: hidden;
+    word-break: break-word;
+  }
+  .Instafeed--item .Instafeed--Caption--overlay .Instafeed--LikeCount,
+  .Instafeed--item .Instafeed--Caption--overlay .Instafeed--Caption,
+  .Instafeed--item .Instafeed--Caption--overlay time {
+    color:#FFF;
+  }
+  .Instafeed--item .Instafeed--Caption--overlay time {
+    position:absolute;
+    bottom:20px;
+    text-transform: uppercase;
+  }
+</style>
+<div id="instagramFeed" class="instagram-feed-wrapper"></div>
+<div class="container" id="instagramFeedDesc">
+  <div class="d-md-flex">
+  	<h2 class="title instagram-text">{{ section.settings.pre_text}} <a href="https://www.instagram.com/explore/tags/{{section.settings.tag}}/" target="_blank" rel="noopener">#{{ section.settings.tag}}</a> {{ section.settings.after_text}}</h2>
+    <a href="https://www.instagram.com/{{section.settings.account}}/" class="Button Button--primary instagram-button" target="_blank" rel="noopener">{{ section.settings.button_label}}</a>
+  </div>
+</div>
+{% raw %}
+<script id="instagram-template" type="text/x-handlebars-template">
+    <a href="{{link}}" class="carousel-cell Instafeed--item" rel="nofollow noopener" target="_blank">
+        <img src="{{image_url}}" class="Instafeed--thumbnail" />
+        <div class="Instafeed--Caption--overlay">
+            <span class="Instafeed--LikeCount"><svg class="Icon Icon--heart" viewBox="0 0 17 15" role="presentation">
+                <path d="M15.0349331 1.40485867C14.1287273.49933787 12.9252477 0 11.6443673 0S9.16000731.49933787 8.25448651 1.40417371c-.01164437.01164436-.02328874.02328873-.03493311.03561806-.01164436-.01232933-.02260377-.02328873-.03424813-.0349331C7.2790995.49933787 6.07561989 0 4.79473949 0 3.51385908 0 2.31037947.49933787 1.40417371 1.40485867.49796794 2.31037947 0 3.51385908 0 4.79473949 0 6.07561989.4986529 7.2790995 1.40417371 8.1846203L8.2195534 15l6.8153797-6.8153797c.9055208-.9055208 1.4041737-2.10900041 1.4041737-3.38988081 0-1.28019545-.4986529-2.48436002-1.4041737-3.38988082z"> </path>
+            </svg>{{ countLikes }} likes</span>
+            <p class="Instafeed--Caption">
+                {{caption}}
+            </p>
+            <time class="Instafeed--date">{{ created }}</time>
+        </div>
+    </a>
+</script>
+{% endraw %}
+{{ 'handlebars.min.js' | asset_url | script_tag }}
+{{ 'jquery.instagramFeed.min.js' | asset_url | script_tag }}
+{{ 'flickity.pkgd.min.js' | asset_url | script_tag }}
+<script charset="utf-8">
+  (function ($) {
+    $(window).on('load', function () {
+      $.instagramFeed({
+        'tag': '{{ section.settings.tag }}',
+        'get_data': true,
+        'callback': function (data) {
+          let instaData = data.edge_hashtag_to_media.edges;
+          instaData.slice(0, {{ section.settings.limit }}).filter(x=> x.node.edge_media_to_caption.edges.length > 0).forEach(item => {
+            let node = item.node;
+            let source = $("#instagram-template").html();
+            let template = Handlebars.compile(source);
+            let taken = new Date(node.taken_at_timestamp * 1000).toDateString().substr(4);
+            //change format to month date,year
+            let created= taken.slice(0, 6) + ',' + taken.slice(6);
+            let context = { 
+              link: "https://www.instagram.com/p/"+node.shortcode+"/",
+              image_url : node.display_url,
+              countLikes : node.edge_liked_by.count,
+              caption : node.edge_media_to_caption.edges[0].node.text,
+              created : created
+            };
+            let html = template(context);
+            $("#instagramFeed").append(html);
+          });
+          $('#instagramFeed').flickity({
+            cellAlign: 'left',
+            wrapAround: true,
+            pageDots: false,
+            setGallerySize: false,
+            prevNextButtons: true,
+            arrowShape: { "x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25 }
+          });
+        }
+      });
+    });
+  })(jQuery);
+</script>
+{% schema %}
+  {
+    "name": "Instagram Feeder",
+    "settings": [
+		{
+          "type": "text",
+          "id": "account",
+          "label": "Instagram Account",
+          "default": "adeptcosmetics"
+        },
+		{
+          "type": "text",
+          "id": "tag",
+          "label": "Tag",
+          "default": "adeptcosmetics"
+        },
+		{
+          "type": "number",
+          "id": "limit",
+          "label": "Limit",
+          "default": 20
+        },
+		{
+          "type": "text",
+          "id": "pre_text",
+          "label": "Text before tag",
+          "default": "Tag a photo"
+        },
+		{
+          "type": "text",
+          "id": "after_text",
+          "label": "Text after tag",
+          "default": "for a chance to be featured!"
+        },
+		{
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Follow Us!"
+        }
+	],
+	"presets": [{
+      "name": "Instagram Feeder",
+      "category": "Social media",
+      "settings": {
+        "tag": "adeptcosmetics"
+      }
+    }]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
