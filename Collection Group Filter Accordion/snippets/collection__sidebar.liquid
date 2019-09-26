@@ -15,7 +15,7 @@
         {%- assign tags_categories_arr = tags_categories | split: "|" | uniq -%}
 
         {%- for tags_cat in tags_categories_arr -%}
-        {%- assign prefix_cat = tags_cat | strip -%}
+        {%- assign prefix_cat = tags_cat | strip | append:":" -%}
         {% unless tags_cat == blank %}
         <div class="filter-group" id="filter-size">
             <h5>{{- tags_cat | strip | replace:'_',' ' | capitalize -}}: </h5>
