@@ -1,15 +1,40 @@
 <div class="filter-list">
     <ul>
-        {% for tags in cate_arr %}
-        {% unless tags == blank %}
-        {% assign tag = tags|split:";" | first %}
-        {% assign tag_original = tags|split:";" | last %}
-        {% assign tag_label = tag_original | remove:prefix %}
-        <li>
-            <a {% if current_tags contains tag_original %} class="active" {%endif%}
-                data-href="{{ tag }}">{{ tag_label }}</a>
+        {%- for tags in cate_arr -%}
+        {%- unless tags == blank -%}
+        {%- if tags contains prefix -%}
+        {%- assign tag_link = tags | replace:":","-" | strip -%}
+        {%- assign tag = tags | split:":" | last | strip -%}
+        {%- if prefix contains 'color' or prefix contains 'colour' or prefix contains 'Color' or prefix contains 'Colour' -%}
+        {%- assign image_name = tag | handle | append: '.' | append:'png' -%}
+        <li class="color">
+            <a {% if current_tags contains tags %} class="active" {% endif %} data-href="{{ tag_link | handle }}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                    <g id="checkmark">
+                        <polygon points="31.86 85.65 5 58.79 10.32 53.47 31.86 75 89.68 17.18 95 22.5 31.86 85.65">
+                        </polygon>
+                    </g>
+                </svg>
+                <span class="swatch"
+                    style="background-image:url({{- image_name | asset_url -}});background-color:{{- tag -}};"></span>
+                <span>{{ tag }}</span>
+            </a>
         </li>
-        {% endunless %}
-        {% endfor %}
+        {%- else -%}
+        <li>
+            <a {% if current_tags contains tags %} class="active" {% endif %} data-href="{{ tag_link | handle }}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                    <g id="checkmark">
+                        <polygon points="31.86 85.65 5 58.79 10.32 53.47 31.86 75 89.68 17.18 95 22.5 31.86 85.65">
+                        </polygon>
+                    </g>
+                </svg>
+                <span>{{ tag }}</span>
+            </a>
+        </li>
+        {%- endif -%}
+        {%- endif -%}
+        {%- endunless -%}
+        {%- endfor -%}
     </ul>
 </div>
