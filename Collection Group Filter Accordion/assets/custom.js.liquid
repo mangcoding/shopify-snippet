@@ -10,7 +10,7 @@ $(document).ready(function(){
   $('.side-overlay').click(function () {
     $('#filter--sidebarToggle').trigger('click');
   });
-  $(".filter-group").on("click", "h5", function (e) {
+  $("#shopify-section-collection__sidebar").on("click", ".filter-group h5", function (e) {
     e.preventDefault();
     var _parent = $(this).parent();
     var _this = $(this);
@@ -24,9 +24,9 @@ $(document).ready(function(){
     _parent.outerHeight(_childHeight + 12);
   });
 
-  $(".filter-group").on("click", "a", function (e) {
+  $("#shopify-section-collection__sidebar").on("click", ".filter-group a", function (e) {
     e.preventDefault();
-    $(this).parent().siblings().find('a').removeClass('active');
+    $(this).parent().siblings().find('a').not(this).removeClass('active');
     $(this).toggleClass("active");
     let collection = $("#collection-handle").data().handle;
     let filters = [];
@@ -37,10 +37,13 @@ $(document).ready(function(){
       //let newFilterURL = collection+"/"+filters.join("+");
       //window.location.href = newFilterURL;
       Shopify.theme.jsCollection.newFilterURL(filters.join("+"));
+    } else {
+      //Clear Filter
+      Shopify.theme.jsCollection.newFilterURL("");
     }
   });
-
   $(".filter-group").each(function () {
-    $(this).find('h5').trigger('click');
-  })
+    var _childHeight = $(this).outerHeight();
+    $(this).outerHeight(_childHeight + 12);
+  });
 });

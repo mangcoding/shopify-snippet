@@ -8,7 +8,16 @@ Shopify.theme.jsCollection = {
         if (this.enable_filter == true || this.enable_sorting == true) {
             $('#sort-by').val($('#sort-by').data('default-sort'));
             $('#tag_filter, #sort-by').on('change', function () {
-                Shopify.theme.jsCollection.filterURL();
+                //Shopify.theme.jsCollection.filterURL();
+                let filters = [];
+                $(".filter-group a.active").each(function (i, val) {
+                    filters.push($(this).data().href);
+                });
+                if (filters.length > 0) {
+                    Shopify.theme.jsCollection.newFilterURL(filters.join("+"));
+                } else {
+                    Shopify.theme.jsCollection.newFilterURL("");
+                }
             });
         }
     },
@@ -92,11 +101,17 @@ Shopify.theme.jsCollection = {
             var collectionMatrixWrapper = $('.collection-matrix__wrapper');
             var collectionMatrix = $('.collection-matrix');
             var pagination = $('.container--pagination'); // Get and set new breadcrumb html
-
+            var sidebarContainer = $("#shopify-section-collection__sidebar");
             var filteredBreadcrumb = $(data).find('.breadcrumb__container').html();
+            var sidebarHTML = $(data).find('#shopify-section-collection__sidebar').html();
             breadcrumbContainer.html(filteredBreadcrumb); // Remove loading animation
-
+            sidebarContainer.html(sidebarHTML);
             collectionMatrix.removeClass('loading-in-progress'); // Get and set filtered collection thumbnails
+
+            $(".filter-group").each(function () {
+                var _childHeight = $(this).outerHeight();
+                $(this).outerHeight(_childHeight + 12);
+            });
 
             var filteredData = $(data).find('.collection-matrix');
             collectionMatrix.empty();

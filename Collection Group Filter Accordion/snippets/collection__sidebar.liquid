@@ -1,28 +1,25 @@
-<div id="shopify-section-collection__sidebar"
-    class="shopify-section sidebar-section collection-sidebar is_sidebar_show">
-    <aside class="one-whole column has-padding-bottom" id="collection-handle"
-        data-handle="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}">
-        {% for tag in collection.all_tags %}
-        {% if tag contains ":" %}
-        {% capture tags_categories %}
-        {% unless tags_categories == blank %}
-        {{ tags_categories }}
-        {% endunless %}|
-        {{ tag | strip | split:':' | first }}
-        {% endcapture %}
-        {% endif %}
-        {% endfor %}
-        {%- assign tags_categories_arr = tags_categories | split: "|" | uniq -%}
-
-        {%- for tags_cat in tags_categories_arr -%}
-        {%- assign prefix_cat = tags_cat | strip | append:":" -%}
-        {% unless tags_cat == blank %}
-        <div class="filter-group" id="filter-size">
+<div id="shopify-section-collection__sidebar" class="shopify-section sidebar-section collection-sidebar is_sidebar_show">
+  <aside class="one-whole column has-padding-bottom" id="collection-handle" data-handle="/collections/{% if collection.handle != blank %}{{ collection.handle }}{% else %}all{% endif %}">
+    {% for tag in collection.all_tags %}
+      {% if tag contains ":" %}
+          {%- capture tags_categories -%}
+    		{%- unless tags_categories == blank -%}
+    			{{- tags_categories -}}
+    		{%- endunless -%}|
+    		{{- tag | strip | split:':' | first | strip | downcase  -}}
+    	  {%- endcapture -%}
+      {% endif %}
+    {% endfor %}
+    {%- assign tags_categories_arr = tags_categories | split: "|" | uniq -%}
+    {%- for tags_cat in tags_categories_arr -%}
+    	{%- assign prefix_cat = tags_cat | strip | append:":" -%}
+    	{% unless tags_cat == blank %}
+          <div class="filter-group expanded" id="filter-{{tags_cat}}" style="height:100%">
             <h5>{{- tags_cat | strip | replace:'_',' ' | capitalize -}}: </h5>
-            {%- include 'tag__filter__loop', cate_arr: collection.all_tags, prefix: prefix_cat -%}
-        </div>
-        {% endunless %}
-        {%- endfor -%}
-
-    </aside>
+            {%- include 'tag__filter__loop', cate_arr: collection.tags, prefix: prefix_cat -%}
+          </div>
+    	{% endunless %}
+    {%- endfor -%}
+    
+  </aside>
 </div>
